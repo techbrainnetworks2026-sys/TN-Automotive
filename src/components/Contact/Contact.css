@@ -1,0 +1,13 @@
+/* CONTACT SECTION */
+.contact-wrapper {
+  display: grid; grid-template-columns: 1fr; gap: 30px;
+}
+
+@media (min-width: 1024px) { .contact-wrapper { grid-template-columns: 1fr 1fr; } }
+
+.form-input {
+  width: 100%; padding: 12px; border-radius: var(--radius-md);
+  border: 1px solid #E2E8F0; background: var(--white);
+  font-family: inherit; transition: border-color 0.3s ease;
+}
+.form-input:focus { outline: none; border-color: var(--secondary); }

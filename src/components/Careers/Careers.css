@@ -1,0 +1,35 @@
+/* CAREERS SECTION */
+.careers-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) { .careers-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .careers-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.job-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.job-icon {
+  width: 50px; height: 50px;
+  background: rgba(10, 37, 64, 0.05);
+  border-radius: 12px;
+  display: flex; justify-content: center; align-items: center;
+  color: var(--primary);
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.job-details { flex-grow: 1; }
+.job-details h4 { margin-bottom: 4px; font-size: 1.1rem; }
+.job-details p { font-size: 0.85rem; color: var(--text-secondary); }
+.apply-btn {
+  background: transparent; border: none; color: var(--secondary);
+  display: flex; align-items: center; cursor: pointer; font-weight: 600;
+  transition: transform 0.2s ease;
+}
+.apply-btn:hover { transform: translateX(5px); }

@@ -1,0 +1,16 @@
+/* INDUSTRIES SECTION */
+.industries-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.industry-badge {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 500;
+}
+
+.dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
