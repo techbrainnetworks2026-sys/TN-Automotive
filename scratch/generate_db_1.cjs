@@ -1,0 +1,492 @@
+const fs = require('fs');
+const path = require('path');
+
+const dataDir = path.join(__dirname, 'product_data');
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
+
+const products1to5 = {
+  p1: {
+    id: 1,
+    title: "Electric Vehicle Fleet Management System",
+    shortSummary: "Enterprise-grade cloud platform for real-time monitoring, state-of-charge tracking, battery health diagnostics, and smart charging optimization for commercial EV fleets.",
+    intro: [
+      "The global transition toward sustainable logistics has accelerated the adoption of electric vehicles (EVs) in commercial fleets. However, fleet operators face unique operational challenges—such as range anxiety, battery degradation, charging infrastructure limitations, and complex grid integration—that traditional internal combustion engine (ICE) fleet management systems are not equipped to address. Our Electric Vehicle Fleet Management System is an enterprise-grade, cloud-native platform designed to optimize the operations of mixed and pure EV fleets in real-time.",
+      "By integrating vehicle telematics, advanced battery diagnostics, predictive routing algorithms, and smart charging infrastructure management, our solution provides operators with complete visibility and actionable insights. The system acts as the digital nervous system for EV fleet operations, enabling companies to maximize fleet availability, extend battery life, reduce energy costs, and seamlessly comply with emerging environmental regulations. It bridges the gap between vehicle telematics and grid load management, providing a unified console for logistics, maintenance, and energy management."
+    ],
+    features: [
+      { title: "Real-Time State-of-Charge (SoC) Monitoring", desc: "Tracks vehicle battery levels continuously with high-precision estimation based on driving behavior, terrain, payload, and environmental temperature." },
+      { title: "Predictive Battery Health Diagnostics", desc: "Analyzes battery degradation patterns using electrochemical and thermal models to predict State of Health (SoH) and remaining useful life (RUL)." },
+      { title: "Smart Charging Scheduler", desc: "Automates depot charging schedules based on electricity tariff rates, vehicle departure times, and depot power capacity to avoid peak demand charges." },
+      { title: "Range Anxiety Mitigation Engine", desc: "Calculates dynamic driving ranges by factoring in live traffic, elevation changes, weather conditions, and cabin heating/cooling usage." },
+      { title: "Depot Load Balancing", desc: "Dynamically distributes available power across multiple chargers to prevent grid overload and ensure high-priority vehicles are charged first." },
+      { title: "Vehicle-to-Grid (V2G) Optimization", desc: "Coordinates energy discharge back to the grid or depot facility during peak tariff hours, generating ancillary revenue for fleet operators." },
+      { title: "Thermal Management Alerts", desc: "Monitors battery pack temperature profiles in real-time to detect anomalous thermal runaway risks and issue early warning alerts." },
+      { title: "Carbon Emission Tracking & Reporting", desc: "Quantifies greenhouse gas emission offsets in real-time for corporate sustainability reporting and ESG compliance." }
+    ],
+    background: "Commercial logistics fleets are transitioning rapidly to electric mobility to meet corporate carbon reduction targets and comply with urban zero-emission zones. However, managing electric trucks and vans is fundamentally different from managing diesel fleets. Operating variables like ambient temperature, payload weight, driver acceleration patterns, and highway elevation profiles heavily impact the range of lithium-ion batteries. Fleet operators also face the challenge of grid constraints, where charging multiple heavy-duty trucks simultaneously can exceed depot power capacities, incurring massive utility penalties. Without integrated visibility between logistics schedules, vehicle battery chemistry, and charging station hardware, fleets suffer from high operational downtime and premature battery pack degradation.",
+    problem: "Traditional fleet management software focuses on fuel cards and maintenance schedules based on odometer readings, which fails completely when applied to EVs. Operators face constant range anxiety, under-utilization of vehicles due to uncoordinated charging, and high utility bills from unmanaged peak charging demand. Furthermore, battery packs degrade unpredictably if subjected to constant rapid charging or extreme thermal states, leading to high capital replacement costs. Fleet managers require an integrated software solution that links route dispatching, battery chemistry monitoring, and energy grid orchestration into a single platform.",
+    functionalities: [
+      { title: "Battery State Analytics Hub", desc: "Aggregates cell-level voltage and temperature data from the vehicle CAN bus to construct a real-time digital twin of the battery pack." },
+      { title: "Route-to-Charge Matcher", desc: "Aligns route schedules with charger availability, recommending optimum charging stops along routes based on speed, wait times, and charging rates." },
+      { title: "Grid Integration Engine", desc: "Interfaces directly with utility companies via OpenADR protocols to coordinate load shedding and participate in demand response events." },
+      { title: "Depot Management Console", desc: "Provides site managers with complete visualization of charger uptime, connector status, charging profiles, and instantaneous power draw." },
+      { title: "Driver Coaching Portal", desc: "Analyzes driving telemetry—such as regenerative braking efficiency and excessive acceleration—to coach drivers on maximizing range." },
+      { title: "Maintenance Predictor", desc: "Tracks parameters like coolant flow rates, cell imbalance, and contactor wear to predict battery and powertrain failures before they occur." }
+    ],
+    valueDelivery: "Our Electric Vehicle Fleet Management System delivers value by transforming raw battery telemetry into actionable operational strategies. First, it eliminates range anxiety by providing mathematically proven dynamic range calculations, ensuring that vehicles return to the depot without unplanned road stops. Second, it reduces electricity costs by up to 45% through intelligent load shifting, charging vehicles when power is cheapest and grid load is low. Third, the system extends battery lifecycle by 25-30% by enforcing charging boundaries, limiting thermal stress, and prioritizing slower, balanced charging cycles when delivery schedules permit. Lastly, it automates ESG emissions compliance by mapping exact grid energy mixes to actual carbon reductions, providing auditable reports for regulatory bodies.",
+    workflow: [
+      { step: 1, title: "Data Ingestion", desc: "Telemetry devices pull battery cell voltage, SoC, temperature, and GPS coordinates from the vehicle CAN bus, transmitting it via MQTT over cellular networks." },
+      { step: 2, title: "Edge Analytics", desc: "Edge devices perform primary filtering and anomaly detection to flag critical thermal alerts within milliseconds." },
+      { step: 3, title: "Cloud Processing & Digital Twin Updating", desc: "The cloud platform processes telemetry, updates the battery digital twin, and recalculates state-of-health projections." },
+      { step: 4, title: "Optimization & Dispatching", desc: "Algorithms match vehicle state with delivery routes and charging station schedules to optimize the day's operations." },
+      { step: 5, title: "Execution & Monitoring", desc: "Real-time dashboards track vehicles, send automated alerts, and balance depot power grids during charging." }
+    ],
+    process: [
+      { step: 1, title: "Fleet Telematics Integration", desc: "Install OBD-II/J1939 telematics hardware or connect via manufacturer cloud APIs to establish vehicle data streams." },
+      { step: 2, title: "Charger Networking (OCPP Setup)", desc: "Connect depot charging hardware to the management system using the Open Charge Point Protocol (OCPP)." },
+      { step: 3, title: "Utility & Grid Integration", desc: "Establish secure API links with local utility companies to receive real-time tariff rates and demand response signals." },
+      { step: 4, title: "Route and Dispatch Syncing", desc: "Integrate the system with existing enterprise resource planning (ERP) and route dispatch software." },
+      { step: 5, title: "AI Model Initialization", desc: "Train battery state-of-health and dynamic range prediction models using historical fleet operational data." },
+      { step: 6, title: "Go-Live & Operations", desc: "Launch the operator console, monitor operations, and generate weekly reports on cost and carbon savings." }
+    ],
+    architecture: "The platform is built on a distributed, cloud-native microservices architecture that handles high-throughput IoT telemetry streams. It consists of three primary systems: the Edge Telematics layer deployed inside the vehicles, the Core Cloud Platform hosted on AWS, and the Enterprise Interface layer. The communication layer relies on secure, bidirectional MQTT/TLS connections for vehicle telemetry and OCPP/TLS protocols for charger communications. Data is processed in real-time by a streaming analytics engine and routed to high-speed time-series databases for vehicle state data, and relational databases for master configurations and customer details.",
+    techArch: {
+      frontend: "Built with React.js using TypeScript, styled with custom modular CSS for dashboards and map layers, incorporating high-performance map rendering via Mapbox GL.",
+      backend: "Microservices developed in Go and Java (Spring Boot) packaged in Docker containers and orchestrated by Kubernetes (EKS) for high availability.",
+      gateway: "NGINX API Gateway managing secure routing, rate limiting, and token-based authentication using OAuth2 / JWT.",
+      processing: "Apache Kafka serves as the central event bus, streaming telemetry data to Apache Flink for real-time windowed aggregation and anomaly detection.",
+      ai_ml: "Python-based ML service utilizing PyTorch and Scikit-learn for battery state-of-health predictions and range forecasting, running on AWS SageMaker.",
+      edge: "Embedded C++ client application running on Linux-based telematics units, executing edge filtering and local CAN-bus message translation.",
+      security: "End-to-end encryption with TLS 1.3, hardware security modules (HSM) for vehicle credentials, and role-based access control (RBAC).",
+      cloud: "AWS infrastructure featuring Amazon RDS (PostgreSQL) for transactional data, InfluxDB for time-series metrics, and Amazon S3 for archival storage.",
+      integration: "REST APIs, GraphQL, and Webhooks interface with external systems like SAP ERP and Salesforce.",
+      monitoring: "Prometheus and Grafana for system health monitoring, combined with Elasticsearch, Logstash, and Kibana (ELK Stack) for audit logging."
+    },
+    technologies: {
+      languages: "Go, TypeScript, Python, C++",
+      frameworks: "React, Spring Boot, Apache Flink",
+      databases: "InfluxDB, PostgreSQL, Redis",
+      cloud_platforms: "Amazon Web Services (AWS)",
+      ai_ml_tools: "PyTorch, TensorFlow, Scikit-learn",
+      iot: "OBD-II, J1939 CAN-bus, OCPP 2.0.1, OpenADR 2.0b",
+      protocols: "MQTT over TLS, HTTP/2, gRPC",
+      devops: "Docker, Kubernetes, Terraform, GitHub Actions",
+      cybersecurity: "OAuth 2.0, TLS 1.3, HSM key vaults, WAF"
+    },
+    realWorld: [
+      { title: "Last-Mile Delivery Depot Optimization", desc: "Deployed across 1,200 electric delivery vans in a metropolitan area, reducing peak electricity charges by 38%." },
+      { title: "Municipal Transit Bus Management", desc: "Orchestrated charging and route scheduling for a municipal fleet of 150 electric transit buses, ensuring 100% route compliance." },
+      { title: "Cold-Chain Logistics Monitoring", desc: "Managed battery allocation for refrigerated electric trucks, balancing cabin cooling, refrigeration payload, and vehicle propulsion." },
+      { title: "Airport Ground Support Equipment", desc: "Tracked and managed a diverse fleet of electric tugs, baggage loaders, and shuttles across three airport terminals." },
+      { title: "Heavy-Duty Construction Transport", desc: "Provided state-of-health diagnostics for heavy electric dump trucks, predicting battery degradation under extreme load conditions." },
+      { title: "Corporate Shuttle Fleet Integration", desc: "Managed charging profiles and dynamic routing for employee transport shuttles, maximizing passenger throughput." },
+      { title: "Long-Haul Electric Freight Prototyping", desc: "Optimized route-to-charge matching for interstate electric semi-trucks, minimizing idle wait time at high-power charging depots." },
+      { title: "Car-Sharing Fleet EV Management", desc: "Integrated battery health analytics into a public car-sharing service, automating maintenance dispatch for degraded cells." }
+    ],
+    benefits: [
+      { title: "Lower Energy Costs", desc: "Saves up to 45% on charging expenses by dynamically shifting loads to off-peak utility pricing periods." },
+      { title: "Extended Battery Lifecycle", desc: "Increases State of Health (SoH) duration by 25%, delaying expensive battery pack replacements by several years." },
+      { title: "Maximized Vehicle Uptime", desc: "Eliminates unexpected depleted batteries through precise range forecasting and automated charger booking." },
+      { title: "Streamlined ESG Reporting", desc: "Provides auditable carbon offset metrics directly linked to grid energy source allocations." },
+      { title: "Optimized Operational Control", desc: "Combines logistics scheduling, battery health, and charging infrastructure into a single pane of glass." }
+    ],
+    challenges: [
+      { title: "Grid Connection Constraints", desc: "Depots often lack sufficient power capacity from local utility companies, requiring expensive transformer upgrades." },
+      { title: "Battery Aging Nonlinearity", desc: "Battery degradation is highly non-linear and difficult to model accurately across varied temperature ranges." },
+      { title: "Heterogeneous Charger Networks", desc: "Managing a mix of charger brands with varying levels of adherence to the OCPP standard." },
+      { title: "Cellular Connectivity Dropouts", desc: "Vehicles frequently lose connectivity in tunnels or remote areas, requiring offline edge storage and recovery." }
+    ],
+    future: "The future of electric vehicle fleet management lies in autonomous energy trading and AI-driven predictive maintenance. We are developing systems that integrate directly with local virtual power plants (VPPs) using AI models to trade energy dynamically, enabling fleets to buy power at negative prices and sell it back to the grid during shortages. Additionally, the integration of solid-state batteries will require new electrochemical diagnostic models to monitor structural stability and degradation. We are also designing protocols to coordinate automated wireless (inductive) charging lanes, which will allow trucks to recharge their batteries dynamically while driving over dedicated highways.",
+    impact: "This platform transforms commercial transportation by removing the technological barriers to EV adoption. By making electric fleets as reliable and predictable as diesel fleets, we allow shipping companies to confidently scale their zero-emission operations. It reduces the strain on city power grids, aligns logistics with renewable energy production, and drastically reduces urban diesel particulate emissions, promoting public health in transit corridors.",
+    conclusion: "The Electric Vehicle Fleet Management System is more than a tracking tool; it is a critical bridge between modern logistics, battery electrochemistry, and clean energy grids. Implementing this system enables commercial fleets to operate at peak efficiency, minimize capital depreciation, and lead the global shift to zero-emission logistics."
+  },
+  p2: {
+    id: 2,
+    title: "Advanced Driver Assistance Systems (ADAS) Software",
+    shortSummary: "Safety-critical, low-latency software stack for sensor fusion, object detection, path planning, and active safety control in modern vehicles.",
+    intro: [
+      "Modern automotive safety relies heavily on Advanced Driver Assistance Systems (ADAS). These platforms process high-frequency streams of sensory data to interpret the vehicle's surroundings, predict potential hazards, and make active safety interventions within milliseconds. Our ADAS Software stack is an enterprise-grade, ISO 26262 ASIL-D compliant software platform designed for automotive manufacturers and Tier-1 suppliers seeking to implement Level 2+ and Level 3 driver assistance capabilities.",
+      "The platform features advanced sensor fusion algorithms that combine camera, radar, and LiDAR data to create a high-fidelity 3D reconstruction of the vehicle's operating environment. Operating at microsecond execution cycles, our software powers critical safety applications including adaptive cruise control, lane-keep assist, automated emergency braking, and blind-spot detection. Built on a modular, hardware-agnostic architecture, it integrates seamlessly with leading automotive system-on-chip (SoC) platforms, enabling manufacturers to scale safety features across diverse vehicle lines."
+    ],
+    features: [
+      { title: "Multi-Sensor Fusion Engine", desc: "Combines high-resolution camera feeds, radar point clouds, and LiDAR returns to establish a reliable, unified environmental model." },
+      { title: "Real-Time Object Detection & Tracking", desc: "Identifies and tracks pedestrians, vehicles, cyclists, and debris using deep learning models optimized for edge accelerators." },
+      { title: "Precise Lane Boundary Extraction", desc: "Detects lane markings, road edges, barriers, and construction markers under challenging weather and lighting conditions." },
+      { title: "Predictive Path Planning", desc: "Generates smooth, collision-free trajectory options by modeling the future motion of surrounding traffic participants." },
+      { title: "Dynamic Adaptive Cruise Control", desc: "Maintains safe following distances by modulating vehicle acceleration and braking in stop-and-go highway traffic." },
+      { title: "Automated Emergency Steering Assist", desc: "Initiates evasive steering maneuvers when braking is insufficient to avoid a forward collision." },
+      { title: "Driver Monitoring System (DMS)", desc: "Tracks eye gaze, head pose, and blink rates to detect driver distraction, drowsiness, and system handover readiness." },
+      { title: "Over-the-Air (OTA) Calibration", desc: "Enables continuous field updates to camera and sensor calibration matrices without requiring dealership visits." }
+    ],
+    background: "As vehicular traffic increases, automotive safety remains a paramount concern for regulators and consumers. The majority of traffic collisions are caused by human factors such as distraction, fatigue, and delayed reaction times. While hardware sensors like cameras and radar have become cheap, the challenge lies in the software: interpreting noisy, conflicting sensor data in real-time. For instance, a camera might be blinded by direct sunlight while a radar detects a metal sign as an obstacle. Resolving these discrepancies, avoiding false-positive braking events, and maintaining precise lane positioning requires highly advanced, deterministic software engines.",
+    problem: "ADAS development is plagued by fragmentation, high development costs, and strict safety requirements. Legacy systems are often black boxes tied to specific hardware sensors, preventing manufacturers from changing suppliers or upgrading individual components. Additionally, false-positive activations—such as a vehicle slamming on the brakes due to a shadow—erode driver trust and create safety hazards. Developers must build systems that comply with ISO 26262 safety standards while running complex neural networks on power-constrained vehicle ECUs.",
+    functionalities: [
+      { title: "Sensor Driver & Sync Layer", desc: "Interfaces directly with sensor hardware, synchronizing camera frames, radar packets, and LiDAR point clouds using PTP time stamping." },
+      { title: "Perception Pipeline", desc: "Runs optimized convolutional neural networks (CNNs) on the hardware GPU/NPU to classify road objects and signs." },
+      { title: "Localization and Mapping", desc: "Locates the vehicle within its lane with centimeter-level accuracy by matching local sensor features with HD map data." },
+      { title: "Decision & Control Engine", desc: "Computes acceleration, braking, and steering commands based on safety-critical state machine logic." },
+      { title: "Actuator Interface", desc: "Sends steering and braking requests to the vehicle's electronic stability control (ESC) and electric power steering (EPS) systems." },
+      { title: "Diagnostic & Fail-Safe Manager", desc: "Monitors software execution cycles and sensor health, initiating a safe state transition in the event of a fault." }
+    ],
+    valueDelivery: "Our ADAS Software platform delivers value by providing a modular, safety-certified framework that reduces time-to-market for automotive OEMs. By decoupling software logic from physical sensors, manufacturers can easily swap hardware suppliers, lowering bill-of-materials (BOM) costs. The platform's advanced sensor fusion minimizes false-positive interventions by 95% compared to single-sensor systems, improving passenger comfort and safety. Furthermore, its compliant ASIL-D development lifecycle ensures that vehicles meet the most stringent safety ratings (such as Euro NCAP 5-star benchmarks), protecting manufacturers from regulatory non-compliance and liability issues.",
+    workflow: [
+      { step: 1, title: "Sensor Ingestion", desc: "High-frequency raw data is ingested from cameras, radar, and LiDAR over automotive Ethernet and CAN FD buses." },
+      { step: 2, title: "Sensor Synchronization", desc: "Hardware-level timestamping synchronizes all input streams to ensure they represent the exact same physical moment." },
+      { step: 3, title: "Perception & Segmentation", desc: "Deep learning models classify objects, detect lanes, and perform semantic segmentation of the drivable space." },
+      { step: 4, title: "Sensor Fusion & Modeling", desc: "Extended Kalman filters and occupancy grids fuse classifications to construct a 360-degree environment map." },
+      { step: 5, title: "Path Planning & Actuation", desc: "The planning engine evaluates trajectory options, and the control loop sends steering and braking commands to vehicle actuators." }
+    ],
+    process: [
+      { step: 1, title: "Hardware and SoC Selection", desc: "Choose the target silicon platform (e.g., NVIDIA DRIVE, Mobileye EyeQ, or NXP S32G) for hosting the software stack." },
+      { step: 2, title: "Sensor Placement & Interface Configuration", desc: "Define camera, radar, and LiDAR positions on the vehicle and configure device drivers in the software layer." },
+      { step: 3, title: "Sensor Fusion Calibration", desc: "Calibrate intrinsic and extrinsic sensor matrices using target-based and dynamic road calibration tools." },
+      { step: 4, title: "ADAS Stack Deployment", desc: "Flash the compiled binary including RTOS and perception libraries onto the target electronic control units (ECUs)." },
+      { step: 5, title: "Closed-Loop HIL Simulation", desc: "Run extensive Hardware-in-the-Loop (HIL) simulations in virtual environments to validate safety-critical corner cases." },
+      { step: 6, title: "Road Testing & Certification", desc: "Perform public road testing, collect telemetry, tune control gains, and complete ISO 26262 ASIL safety audits." }
+    ],
+    architecture: "The software architecture is built around a safety-split paradigm. Safety-critical control logic runs on a deterministic Real-Time Operating System (RTOS) like QNX or VxWorks, while high-throughput perception pipelines run on a POSIX-compliant system (like Embedded Linux) with GPU/NPU acceleration. The two environments communicate via high-speed IPC (Inter-Process Communication) with built-in validation checks. This separation ensures that even if a perception model crashes, the deterministic safety controllers can still bring the vehicle to a safe stop.",
+    techArch: {
+      frontend: "An engineering debug interface built with Qt/C++ that displays real-time 3D point cloud overlays, bounding boxes, and system diagnostic states.",
+      backend: "High-performance, MISRA C++ compliant perception and control libraries optimized for automotive compilers.",
+      gateway: "Internal communications handled by DDS (Data Distribution Service) middleware, providing secure, real-time message passing.",
+      processing: "Custom CUDA-accelerated image pre-processing libraries that correct distortion, adjust exposure, and format inputs for neural networks.",
+      ai_ml: "Deep Convolutional Neural Networks (CNNs) for object detection, Recurrent Neural Networks (RNNs) for path prediction, compiled using TensorRT.",
+      edge: "Fully optimized embedded binaries running directly on ASIL-D automotive microcontrollers and high-performance system-on-chips (SoCs).",
+      security: "Hardware Security Module (HSM) checking signature integrity of all code, secure boot mechanisms, and encrypted CAN/Ethernet channels.",
+      cloud: "AWS-based data ingestion pipeline that stores and indexes petabytes of driving data for retraining perception models.",
+      integration: "Adaptive AUTOSAR interfaces providing standardized API boundaries for integrating with vehicle body and powertrain ECUs.",
+      monitoring: "Real-time watchdog timers, memory protection units, and extensive diagnostic event managers logging to non-volatile memory."
+    },
+    technologies: {
+      languages: "C++, C, Python (for training)",
+      frameworks: "Adaptive AUTOSAR, ROS 2 (for prototyping), TensorRT",
+      databases: "eXtremeDB (embedded), LevelDB, AWS S3",
+      cloud_platforms: "AWS, Microsoft Azure",
+      ai_ml_tools: "PyTorch, CUDA, TensorRT, OpenCV",
+      iot: "Automotive Cameras, Solid-State LiDAR, FMCW Radar",
+      protocols: "CAN FD, Automotive Ethernet (100BASE-T1), SOME/IP",
+      devops: "Docker, Yocto Project (Linux builds), Jenkins, CMake",
+      cybersecurity: "Secure Boot, HSM, TLS 1.3, SecOC (Secure Onboard Communication)"
+    },
+    realWorld: [
+      { title: "Highway Pilot Automation", desc: "Powers Level 2+ hands-free highway driving systems, including automated lane changes and ramp-to-ramp navigation." },
+      { title: "Urban Automatic Emergency Braking (AEB)", desc: "Deploys in compact passenger cars to detect pedestrians stepping off curbs, avoiding low-speed urban collisions." },
+      { title: "Valet Parking Assistance", desc: "Coordinates low-speed automated steering and path planning in multi-story parking structures using ultrasonic sensors and cameras." },
+      { title: "Heavy Truck Lane Departure Mitigation", desc: "Integrates with class-8 commercial semi-trucks, applying torque overlays to the steering column to prevent lane drifts." },
+      { title: "Intersection Assist System", desc: "Detects cross-traffic at blind intersections using long-range corner radars, warning drivers and applying pre-charge brakes." },
+      { title: "Construction Zone Speed Adaptation", desc: "Reads temporary speed signs and detects traffic cones, adjusting adaptive cruise control thresholds automatically." },
+      { title: "Traffic Jam Pilot", desc: "Enables hands-free driving in dense, slow-moving traffic up to 60 km/h under Level 3 automation conditions." },
+      { title: "Autonomous Delivery Shuttle Perception", desc: "Provides the complete 3D perception and safety envelope for low-speed driverless cargo delivery shuttles." }
+    ],
+    benefits: [
+      { title: "Drastic Collision Reduction", desc: "Prevents up to 80% of forward crashes through instant automated braking and steering interventions." },
+      { title: "High Safety Compliance", desc: "Achieves Euro NCAP 5-star safety scores and conforms directly to strict ISO 26262 ASIL-D regulations." },
+      { title: "Hardware Cost Savings", desc: "Hardware-agnostic design permits the reuse of code across multiple sensor configurations and SoC vendors." },
+      { title: "Reduced Driver Fatigue", desc: "Automates repetitive highway driving tasks, enhancing comfort and alertness on long journeys." },
+      { title: "Continuous Field Upgrades", desc: "Supports OTA updates, allowing safety features to improve over the lifetime of the vehicle." }
+    ],
+    challenges: [
+      { title: "Sensor Occlusion", desc: "Cameras and LiDARs get blinded by heavy rain, snow, or mud, requiring fallback to radar and safe handover modes." },
+      { title: "NPU Thermal Limits", desc: "Running heavy deep learning models on automotive ECUs generates significant heat, requiring thermal-aware model throttling." },
+      { title: "Edge Case Inferences", desc: "Unusual road scenarios, like animals jumping onto highways or debris on roads, are difficult for deep learning models to generalize." },
+      { title: "Safety Handover Latency", desc: "Transitioning vehicle control from automated systems back to human drivers safely within fraction-of-a-second windows." }
+    ],
+    future: "The future of ADAS lies in cooperative perception and end-to-end differentiable neural networks. By integrating vehicle-to-vehicle (V2V) communications, cars will share their raw sensor feeds with surrounding vehicles, allowing them to 'see' around corners and through obstacles. Additionally, transitioning from hand-crafted heuristic control loops to end-to-end deep learning planners will create more natural, human-like driving profiles. Next-generation systems will also integrate with cloud-hosted digital twins to download real-time local hazard profiles, adapting sensor sensitivities to match local road friction and weather anomalies.",
+    impact: "This software is a critical stepping stone toward a zero-fatality future. By democratizing advanced active safety features, it makes collision avoidance technology standard on affordable passenger vehicles, saving thousands of lives globally. It changes the role of the driver, paving the way for fully autonomous transportation systems and transforming car safety from passive impact protection to active collision prevention.",
+    conclusion: "Our Advanced Driver Assistance Systems (ADAS) Software represents the state of the art in automotive perception, planning, and control. By delivering hardware independence, certified safety, and industry-leading sensor fusion performance, we help automotive manufacturers build vehicles that are safer, smarter, and ready for the future of mobility."
+  },
+  p3: {
+    id: 3,
+    title: "Connected Car Infotainment Platforms",
+    shortSummary: "Next-generation in-vehicle infotainment (IVI) software providing hyper-personalized digital experiences, voice assistants, and cloud-connected applications.",
+    intro: [
+      "The vehicle cabin has become an extension of the consumer's digital life. Modern drivers expect seamless connectivity, personalized streaming media, voice-controlled assistants, and real-time navigation. Our Connected Car Infotainment Platform is an enterprise-grade in-vehicle infotainment (IVI) software stack designed for automotive OEMs. Built on top of Android Automotive OS (AAOS) and optimized Linux distributions, it provides a highly customizable, fluid user interface.",
+      "The platform bridges local vehicle networks with global cloud services, enabling features such as over-the-air (OTA) application updates, personalized profiles linked to driver biometrics, and secure in-car commerce. By leveraging HTML5/Qt for UI layout and a high-performance C++ backend, it allows manufacturers to deliver a branded digital experience that remains responsive under all operating conditions. It interfaces directly with vehicle body controllers via secure gateways, ensuring that climate controls, seating adjustments, and vehicle diagnostics are seamlessly integrated into the multimedia display."
+    ],
+    features: [
+      { title: "Customizable Multi-Display UI", desc: "Drives instrument clusters, center consoles, passenger screens, and head-up displays (HUD) from a single system." },
+      { title: "AI Voice Recognition & Control", desc: "Integrates local and cloud-based natural language processing to control climate, media, and navigation hands-free." },
+      { title: "App Ecosystem Support", desc: "Supports sandboxed application deployment, enabling third-party developers to build media and parking apps." },
+      { title: "Biometric Driver Profiling", desc: "Uses facial recognition or fingerprint scanners to automatically adjust seating, mirrors, and music playlists." },
+      { title: "Connected Navigation Engine", desc: "Integrates real-time traffic data, EV charging station status, and parking availability with offline mapping support." },
+      { title: "Secure In-Car Payments", desc: "Enables safe, biometric-authenticated payments for tolls, fuel, charging, and drive-through retail directly from the dashboard." },
+      { title: "Smart Home Integration", desc: "Connects with IoT smart home hubs, allowing drivers to control home lighting, heating, and security systems from the road." },
+      { title: "Multi-Zone Audio Management", desc: "Isolates audio streams for different seats, allowing the driver to hear navigation while passengers stream movies." }
+    ],
+    background: "Historically, in-vehicle infotainment systems were clunky, slow, and outdated by the time a vehicle rolled off the assembly line. Consumer electronics, led by smartphones, set a high standard for screen responsiveness and app updates, which legacy automotive architectures struggled to match. Furthermore, separating safety-critical gauge clusters from multimedia entertainment units was historically difficult. If the music player crashed, the digital speedometer could not go offline. Solving this requires advanced hypervisor virtualization technologies and secure, multi-process operating systems.",
+    problem: "Automotive manufacturers face intense competition from tech giants providing mobile-mirroring solutions. To retain control over the customer relationship and data, OEMs must build their own connected IVI platforms. However, developing these platforms is challenging due to the need to integrate disparate services, guarantee boot-up speeds (e.g., rear-view camera display in under 2 seconds), and prevent cybersecurity breaches that could compromise vehicle control systems.",
+    functionalities: [
+      { title: "Hypervisor Integration Layer", desc: "Runs Android Automotive OS and deterministic RTOS on a single SoC, ensuring absolute safety isolation for gauge clusters." },
+      { title: "Cloud Sync Manager", desc: "Synchronizes user preferences, navigation history, and payment credentials between the vehicle and the user's cloud profile." },
+      { title: "Media Engine", desc: "Manages audio routing, hardware-accelerated video decoding, and digital rights management (DRM) for streaming apps." },
+      { title: "Connectivity Hub", desc: "Coordinates onboard Wi-Fi, 5G cellular modems, Bluetooth pairings, and NFC touchpoints." },
+      { title: "HMI Render Engine", desc: "Executes hardware-accelerated 3D graphics rendering for user interfaces and cluster gauges." },
+      { title: "Diagnostics Daemon", desc: "Monitors IVI hardware diagnostics, thermal sensors, and system health, logging telemetry to the cloud." }
+    ],
+    valueDelivery: "Our Connected Car Infotainment Platform delivers value by helping OEMs regain control of the dashboard experience. By offering a fluid, app-rich environment, it increases customer satisfaction and brand loyalty. The platform opens new, high-margin revenue streams through in-car digital sales, software feature subscriptions (like heated seats or premium sound), and targeted local advertising. It reduces warranty costs by enabling OTA software patches, and its rapid boot time ensures compliance with federal safety regulations for rearview camera displays.",
+    workflow: [
+      { step: 1, title: "Driver Entry & Face Scan", desc: "The vehicle cabin camera performs facial recognition, loading the driver's personalized layout and cloud profile." },
+      { step: 2, title: "Voice System Initialization", desc: "The local voice wake-up model boots up, ready to process wake words offline." },
+      { step: 3, title: "Route & Schedule Syncing", desc: "The system fetches the driver's calendar and navigation routes, pre-conditioning the battery or cabin temperature." },
+      { step: 4, title: "Streaming Media Orchestration", desc: "Audio routing engines connect to streaming services and distribute sound to individual vehicle seat zones." },
+      { step: 5, title: "Vehicle Interaction & Control", desc: "The user controls climate, ADAS settings, and ambient lighting directly from the central touchscreen." }
+    ],
+    process: [
+      { step: 1, title: "Infotainment Hardware Board Bring-up", desc: "Configure bootloaders and drivers on target automotive-grade application processors." },
+      { step: 2, title: "Hypervisor Setup & Partitioning", desc: "Set up the hypervisor (e.g., COQOS or QNX) to partition resources between Android OS and the safety cluster." },
+      { step: 3, title: "HMI Design & Theme Implementation", desc: "Build custom UI layouts and 3D themes using Qt or HTML5 frameworks to match the OEM's brand identity." },
+      { step: 4, title: "Cloud Services Integration", desc: "Establish secure API links for navigation, media streaming, voice assistants, and over-the-air update servers." },
+      { step: 5, title: "Safety and Boot-Time Tuning", desc: "Optimize boot scripts to ensure the backup camera displays within the federally mandated time limit." },
+      { step: 6, title: "System Validation & OTA Launch", desc: "Perform regression testing, complete security penetration audits, and launch the platform with OTA support." }
+    ],
+    architecture: "The platform features a multi-operating-system architecture managed by a Type-1 hypervisor. The safety-critical instrument cluster runs on a microkernel RTOS (such as QNX), while the central infotainment system runs on Android Automotive OS. The two partitions share data via secure virtualized memory links. High-speed 5G connectivity is managed by an independent telematics control unit (TCU), which routes internet traffic to the infotainment core via a local ethernet switch.",
+    techArch: {
+      frontend: "Developed using Qt Quick / QML for highly fluid 60fps animations, integrated with HTML5 web apps running on an optimized Chromium engine.",
+      backend: "C++ system services managing media routing, system configuration, and vehicle network communication via CAN/LIN drivers.",
+      gateway: "Internal bus controller managing SOME/IP (Scalable service-Oriented MiddlewarE over IP) messages over automotive Ethernet.",
+      processing: "Hardware-accelerated video decoding using GStreamer and audio routing via ALSA / PulseAudio with custom DSP integrations.",
+      ai_ml: "On-device wake-word detection and basic command parsing using lightweight TensorFlow Lite models running on the SoC DSP.",
+      edge: "Local caching and sync service storing user data offline, syncing back to cloud databases once internet connection is established.",
+      security: "Hardware-backed storage for payment keys, SELinux policies, containerized sandboxing of third-party apps, and secure boot.",
+      cloud: "Kubernetes-hosted cloud backend using Node.js and Go to manage user profiles, OTA updates, and app store configurations.",
+      integration: "Vehicle Integration APIs connecting the IVI to the vehicle body control module (BCM) and powertrain controllers.",
+      monitoring: "Continuous health logging via systemd journal, transmitted to cloud diagnostics services like Datadog or custom OEM endpoints."
+    },
+    technologies: {
+      languages: "C++, Java, Kotlin, QML, JavaScript",
+      frameworks: "Android Automotive OS (AAOS), Qt/QML, Node.js",
+      databases: "SQLite (local embedded), MongoDB (cloud profile database)",
+      cloud_platforms: "AWS, Google Cloud Platform (GCP)",
+      ai_ml_tools: "TensorFlow Lite, Snips voice engine, Dialogflow",
+      iot: "On-board Telematics, Smart Home IoT APIs, BLE beacons",
+      protocols: "SOME/IP, CAN, LIN, HTTPS, WebSockets",
+      devops: "Docker, Yocto Project, Jenkins, Ansible",
+      cybersecurity: "SELinux, TLS 1.3, Tokenized Payments, OAuth 2.0"
+    },
+    realWorld: [
+      { title: "Luxury Sedan Infotainment", desc: "Powers triple-display setups in high-end sedans, integrating digital clusters, center consoles, and rear screens." },
+      { title: "Electric SUV Route Optimization", desc: "Deploys in electric SUVs, automatically scheduling charging stops and cabin pre-heating based on navigation plans." },
+      { title: "Fleet Delivery Van Infotainment", desc: "Customized for delivery vans, showing route logs, cargo hold temperatures, and providing hands-free dispatch messaging." },
+      { title: "In-Car Commerce Integration", desc: "Enabled instant touch-to-pay fuel dispensing and toll collections across a nationwide gas station network." },
+      { title: "Car-Sharing Service UI", desc: "Integrated into shared urban vehicles, showing local guide tips, unlocking via NFC, and loading guest profiles." },
+      { title: "Off-Road Vehicle Gauges", desc: "Provides specialized 3D pitch-and-roll indicators, topographical maps, and winch controls on rugged off-road dashboards." },
+      { title: "Kid-Friendly Rear Seat Entertainment", desc: "Drives dual headrest screens with individual headphone zones, gaming controls, and parental filters." },
+      { title: "Public Shuttle Passenger Informational Display", desc: "Powers large public shuttle displays, showing routes, weather, local advertising, and estimated arrival times." }
+    ],
+    benefits: [
+      { title: "Smartphone-Like Fluidity", desc: "Delivers smooth 60fps user interfaces with instant touch response and rapid application launching." },
+      { title: "Branded Digital Identity", desc: "Allows OEMs to design bespoke visual layouts and voice assistants, retaining full ownership of customer data." },
+      { title: "Recurring Revenue Streams", desc: "Enables in-car app purchases, feature subscriptions, and localized advertising opportunities." },
+      { title: "Reduced Recall Costs", desc: "Resolves software issues and adds features remotely over-the-air, eliminating dealership visits." },
+      { title: "Regulatory Compliance", desc: "Guarantees rapid boot-times for backup camera rendering, meeting strict national transport safety rules." }
+    ],
+    challenges: [
+      { title: "Strict Boot-Time Limits", desc: "Rearview camera feeds must display within 2 seconds of boot, requiring intensive kernel optimization." },
+      { title: "Safety-Critical Isolation", desc: "Preventing malware from the multimedia side from crossing over to critical vehicle control networks." },
+      { title: "Fragile Network Connections", desc: "Ensuring streaming media and navigation remain functional in tunnels or poor signal rural areas." },
+      { title: "Extreme Thermal Operation", desc: "IVI hardware must operate reliably in temperatures ranging from -40°C to +85°C without active cooling." }
+    ],
+    future: "The future of connected car infotainment will be defined by augmented reality interfaces and generative AI assistants. We are building systems that integrate with passenger glasses and smart windshields to project navigation overlays directly onto the road. Generative AI assistants will hold context-aware conversations, acting as local travel guides and troubleshooting vehicle maintenance issues dynamically. Additionally, the integration of gaming platforms will allow passengers to stream triple-A games directly to high-resolution displays, transforming the vehicle cabin into a mobile gaming lounge during autonomous journeys.",
+    impact: "This platform redefines the relationship between drivers and their vehicles, turning cars into digital living spaces. By integrating cloud services with vehicle telemetry, it allows manufacturers to provide ongoing value throughout the vehicle's lifespan. It drives the adoption of in-car commerce and shapes the future of digital content consumption on the move.",
+    conclusion: "Our Connected Car Infotainment Platform offers a secure, scalable, and premium solution for the modern connected cockpit. By combining the flexibility of Android Automotive OS with strict safety-critical isolation, we enable OEMs to deliver the ultimate digital experience to their customers."
+  },
+  p4: {
+    id: 4,
+    title: "Automotive Augmented Reality Applications",
+    shortSummary: "Advanced augmented reality (AR) software driving heads-up displays (HUDs) and windshield projections with real-time navigation overlays and hazard highlights.",
+    intro: [
+      "Driver distraction and situational awareness are critical factors in road safety. Traditional navigation screens require drivers to look away from the road, losing precious reaction time. Our Automotive Augmented Reality Applications platform is an enterprise-grade software solution designed to project safety-critical information directly into the driver's line of sight. By integrating with high-end Heads-Up Displays (HUDs) and smart windshields, the platform overlays real-time navigation graphics, speed parameters, and safety warnings directly onto the physical environment.",
+      "The system uses advanced spatial calibration, eye-tracking cameras, and low-latency rendering pipelines to ensure that virtual graphics align perfectly with physical lanes, vehicles, and pedestrians. By projecting warnings directly onto the road surface, the platform reduces cognitive load and helps drivers respond to hazards up to 50% faster. Built with modular API support, it interfaces with existing ADAS sensors, navigation engines, and cabin monitoring units to deliver an intuitive, safety-enhancing augmented driving experience."
+    ],
+    features: [
+      { title: "Real-Time Spatial Lane Guidance", desc: "Projects dynamic, path-aligned arrows directly onto physical road lanes to guide drivers through complex turns and exits." },
+      { title: "Pedestrian & Hazard Highlighting", desc: "Draws attention to pedestrians, cyclists, and animals in low-visibility conditions by projecting glowing bounding frames onto them." },
+      { title: "Active Speed & Sign Overlays", desc: "Displays speed limit signs, current speeds, and traffic light statuses directly in the driver's forward field of view." },
+      { title: "Adaptive Eye-Tracking Sync", desc: "Uses internal cabin cameras to track the driver's eye position, continuously adjusting projection angles to prevent parallax errors." },
+      { title: "Adaptive Cruise Distance Marker", desc: "Projects virtual bounding bars under the vehicle ahead, changing color based on safety and tailgating thresholds." },
+      { title: "Off-Road Path Mapping", desc: "Visualizes underlying terrain, pitch/roll indicators, and safe tire placement paths in low-visibility trail environments." },
+      { title: "Interactive Point-of-Interest (POI) Tags", desc: "Displays floating tags over local landmarks, parking lots, and EV charging depots as the vehicle drives past." },
+      { title: "Adverse Weather Enhancement", desc: "Projects highlighted road boundaries and virtual lane markings during heavy fog, rain, or snow based on radar telemetry." }
+    ],
+    background: "As dashboards incorporate larger screens and more menus, driver distraction has reached all-time highs. Looking down at a navigation screen at 100 km/h means traveling blind for dozens of meters. Heads-Up Displays (HUDs) were introduced to solve this, but early models only showed static text and numbers that appeared flat. True augmented reality requires graphics to appear integrated into the physical world (e.g., a turn arrow resting flat on the actual road surface). Achieving this requires extremely low-latency graphics rendering and precise coordinate alignment between sensors, display optics, and the driver's moving eyes.",
+    problem: "Developing automotive AR is difficult due to latency and alignment challenges. If virtual graphics lag behind the physical world by even a few milliseconds (e.g., when the car bumps or turns), the driver experiences visual mismatch, leading to motion sickness and confusion. Furthermore, the system must calibrate graphics dynamically in real-time to adjust for changes in vehicle payload, driver height, and road elevation, while maintaining high readability in both bright sunlight and dark night environments.",
+    functionalities: [
+      { title: "Spatial Localization Engine", desc: "Fuses GPS, IMU, and camera data to create a high-precision spatial coordinate framework for the local environment." },
+      { title: "Dynamic Eye-Tracking Manager", desc: "Monitors infrared pupil camera feeds to compute the driver's exact 3D viewing vector relative to the HUD optics." },
+      { title: "Low-Latency Render Pipeline", desc: "Generates 3D graphics in under 15 milliseconds, utilizing predictive motion algorithms to pre-render frames." },
+      { title: "Sensor Gateway Integration", desc: "Subscribes to ADAS object tracks, forwarding target coordinates for highlighting directly to the AR engine." },
+      { title: "Optical Projection Calibrator", desc: "Compensates for windshield curvature, distortion, and vehicle vibrations using dynamic digital warping." },
+      { title: "Ambient Light Adaptation Controller", desc: "Adjusts laser projector intensity and color contrast in real-time based on forward camera lux sensors." }
+    ],
+    valueDelivery: "Our Automotive AR platform delivers value by significantly improving road safety and enhancing the driving experience. By keeping the driver's eyes focused forward, it decreases reaction times and reduces collision risks. The system acts as an intuitive safety shield, highlighting hazards before they are clearly visible to the human eye. For premium automotive OEMs, it serves as a powerful product differentiator, adding high-tech appeal and enabling higher vehicle pricing. For commercial logistics, it reduces driver fatigue during night and bad weather operations.",
+    workflow: [
+      { step: 1, title: "Sensor Input Ingestion", desc: "ADAS sensors track vehicles, forward cameras detect lane lines, and cabin cameras track the driver's pupils." },
+      { step: 2, title: "Coordinate Synchronization", desc: "The spatial engine aligns the coordinates of physical objects with the coordinate system of the HUD projection optics." },
+      { step: 3, title: "Trajectory Prediction & Planning", desc: "The graphics engine predicts the vehicle's position 20 milliseconds in the future to account for rendering latency." },
+      { step: 4, title: "3D Overlay Generation", desc: "The render pipeline draws navigation arrows, hazard markers, and speed stats using specialized distortion matrices." },
+      { step: 5, title: "Laser HUD Projection", desc: "The laser projector projects the distorted image onto the windshield's reflective PVB interlayer, appearing as a natural overlay on the road." }
+    ],
+    process: [
+      { step: 1, title: "Windshield and HUD Optics Mapping", desc: "Import 3D CAD models of the vehicle windshield and HUD projection optics into the AR calibration tool." },
+      { step: 2, title: "Calibrating the Distortion Matrix", desc: "Generate custom mathematical matrices to correct for image distortion caused by the curved glass surface." },
+      { step: 3, title: "ADAS & Sensor Interface Setup", desc: "Configure CAN/Ethernet routes to pipe radar target tracks, lane metrics, and GPS data into the AR software." },
+      { step: 4, title: "Eye-Tracking Camera Calibration", desc: "Position the steering column cabin camera and configure pupil tracking algorithms to compute 3D gaze points." },
+      { step: 5, title: "Latency Tuning & Prediction Setup", desc: "Tune the predictive motion algorithms to align graphics during rapid steering inputs and vehicle vibrations." },
+      { step: 6, title: "Road Testing & UX Optimization", desc: "Perform road tests under varying light, test color palettes for visibility, and lock down the production software build." }
+    ],
+    architecture: "The AR platform runs on a high-performance system-on-chip (SoC) equipped with a dedicated NPU for eye-tracking and a GPU for real-time 3D rendering. It connects to the vehicle's central ADAS processor via an ultra-low-latency 10Gbps automotive Ethernet link. The software stack uses a real-time kernel to guarantee execution deadlines, ensuring that safety-critical hazard overlays are always prioritized over informational point-of-interest tags.",
+    techArch: {
+      frontend: "An embedded UI application developed using Unity 3D / Unreal Engine with custom shaders, designed for projection onto holographic windshield displays.",
+      backend: "Real-time C++ tracking and localization libraries, executing spatial coordinate translations at 120Hz.",
+      gateway: "Direct high-speed PCIe interface connecting the main graphics processor to the laser projector control board.",
+      processing: "Windshield distortion correction module utilizing hardware-accelerated vertex shaders to warp images on the GPU.",
+      ai_ml: "Convolutional neural network (CNN) running on the SoC NPU, analyzing infrared cabin camera frames to compute pupil coordinates.",
+      edge: "Fully contained local ECU application, operating with zero cloud dependencies for all safety-critical overlays.",
+      security: "Cryptographic validation of all boot code, secure communication channels, and memory isolation policies for the rendering engine.",
+      cloud: "Optional connection to cloud navigation APIs to download spatial metadata for local POIs and construction zones.",
+      integration: "Adaptive AUTOSAR interface providing connection points to vehicle speed sensors, steering angle sensors, and ADAS ECUs.",
+      monitoring: "Internal diagnostic loop checking latency, projector temperature, and eye-tracking status, switching to a flat backup mode if faults are detected."
+    },
+    technologies: {
+      languages: "C++, GLSL Shading Language, Python",
+      frameworks: "Unity 3D, Unreal Engine, OpenCV, OpenXR",
+      databases: "RocksDB (embedded local storage for spatial POIs)",
+      cloud_platforms: "AWS (for map data hosting and calibration models)",
+      ai_ml_tools: "TensorFlow Lite (for pupil tracking), NVIDIA TensorRT",
+      iot: "Laser-based HUD Projector, Time-of-Flight Driver Cameras",
+      protocols: "Automotive Ethernet (1000BASE-T1), gRPC, CAN FD",
+      devops: "Docker, CMake, Jenkins, GitLab CI",
+      cybersecurity: "Secure Boot, ASIL-certified microkernel, TLS 1.3"
+    },
+    realWorld: [
+      { title: "Premium Sedan AR Navigation", desc: "Projects animated navigation arrows onto physical lane divisions, guiding drivers through complex multi-level highway interchanges." },
+      { title: "Heavy Logistics Night Vision HUD", desc: "Deploys in long-haul semi-trucks, highlighting deer, pedestrians, and road boundaries in pitch-black highway environments." },
+      { title: "Electric vehicle range visualizer", desc: "Projects a green contour map onto the road surface, showing the exact driving boundary reachable with remaining charge." },
+      { title: "Off-Road Navigation Overlay", desc: "Guides off-road search and rescue vehicles, projecting safe pathways over steep rocks, mud, and sand dunes." },
+      { title: "Emergency Vehicle Alert HUD", desc: "Highlights the direction of approaching police, ambulance, or fire trucks, projecting warnings onto blind intersection walls." },
+      { title: "Urban Autonomous Valet HUD", desc: "Shows parking spaces available for reservation, highlighting occupied spaces in red and free spaces in green." },
+      { title: "Delivery Van Route Tags", desc: "Projects floating house numbers and package delivery designations onto physical buildings as the driver arrives." },
+      { title: "Fog-Prone Bridge Lane Assist", desc: "Projects virtual bright lane markings onto the windshield during dense fog, using long-range radar feedback." }
+    ],
+    benefits: [
+      { title: "Reduced Driver Distraction", desc: "Keeps the driver's eyes focused on the road, eliminating the dangerous habit of looking down at navigation displays." },
+      { title: "Enhanced Night Safety", desc: "Highlights hazards and pedestrians in low-light conditions, increasing reaction times by up to 50%." },
+      { title: "Lower Cognitive Load", desc: "Presents navigation and speed data as natural physical overlays, reducing driver stress in unfamiliar cities." },
+      { title: "Premium Product Value", desc: "Differentiates vehicles in the luxury market, enabling OEMs to charge a premium for high-tech HUD systems." },
+      { title: "All-Weather Usability", desc: "Improves driving confidence and safety in fog, heavy rain, and snow through radar-guided projections." }
+    ],
+    challenges: [
+      { title: "Parallax Distortion", desc: "Ensuring virtual graphics align correctly when the driver shifts their head up, down, or sideways." },
+      { title: "Visual Clutter Risks", desc: "Projecting too many graphics can block the driver's view, requiring strict priority filtering for warnings." },
+      { title: "Severe Thermal Stress", desc: "Projector lasers generate intense heat and must remain functional under direct windshield sunlight." },
+      { title: "Extreme Latency Sensitivity", desc: "Even minor lags of 20ms during sharp turns can cause driver disorientation and motion sickness." }
+    ],
+    future: "The future of automotive AR lies in full-windshield holographic projections and smart contact lenses. Windshields will be coated with transparent light-emitting films, turning the entire glass surface into an active display capable of showing wide-field panoramas. Integration with cloud-based digital twins will allow vehicles to project virtual representations of upcoming road conditions (like hidden icy curves or traffic jams) kilometers before they are physically visible. Additionally, smart contact lenses will overlay personal health and destination metrics directly onto the driver's retina, syncing with the vehicle's interior systems.",
+    impact: "This technology fundamentally changes how humans interact with their environment while driving. By blending digital data with the physical world, it makes driving more intuitive, safer, and less stressful. It accelerates the adoption of Level 3 autonomous vehicles by providing passengers with a clear visual representation of what the car's sensors see, building crucial trust in automated systems.",
+    conclusion: "Our Automotive Augmented Reality Applications represent a major milestone in human-machine interface design. By combining high-speed spatial math, eye tracking, and low-latency rendering, we turn windshields into safety shields, helping OEMs build the safest and most advanced vehicles on the road."
+  },
+  p5: {
+    id: 5,
+    title: "Traffic Flow Optimization Software",
+    shortSummary: "Enterprise AI platform utilizing real-time traffic sensor data, signal control APIs, and predictive modeling to eliminate urban congestion and reduce emissions.",
+    intro: [
+      "Urbanization and rising vehicle density have led to chronic traffic congestion in cities worldwide, costing billions in lost productivity and fuel waste. Traditional fixed-time traffic light cycles are unable to adapt to dynamic changes in traffic volume, emergency vehicle routes, and weather events. Our Traffic Flow Optimization Software is an enterprise-grade, cloud-hosted AI platform designed for municipal transport authorities, smart city planners, and highway operators seeking to eliminate gridlock.",
+      "The platform aggregates data from diverse sources—including camera feeds, induction loops, radar sensors, and connected vehicle GPS telemetry—to create a real-time digital twin of the city's traffic networks. Using advanced Reinforcement Learning algorithms, the system coordinates traffic light timings dynamically across entire corridors, creating 'green waves' that adapt to vehicle speeds in real-time. It optimizes traffic flow, decreases travel times, reduces idle emissions, and prioritizes emergency vehicles and public transit buses automatically."
+    ],
+    features: [
+      { title: "Dynamic Green Wave Coordination", desc: "Aligns traffic light signals along busy corridors to allow groups of vehicles to travel without stopping." },
+      { title: "Multi-Source Sensor Aggregation", desc: "Integrates radar, camera, induction loop, and connected car GPS data into a single unified stream." },
+      { title: "AI-Driven Signal Optimization", desc: "Uses deep reinforcement learning models to adjust green light durations based on real-time vehicle density." },
+      { title: "Emergency Vehicle Preemption", desc: "Interfaces with GPS tracking on emergency vehicles to automatically clear intersections along their route." },
+      { title: "Public Transit Priority System", desc: "Adjusts signal timings to keep transit buses and light rails running on schedule without disrupting general traffic." },
+      { title: "Congestion Bottleneck Predictor", desc: "Uses historical data and predictive modeling to forecast traffic jams 30 minutes before they occur." },
+      { title: "Dynamic Toll and Variable Speed Control", desc: "Interfaces with electronic road signage to adjust speed limits and toll prices based on real-time flow." },
+      { title: "Automated Incident Detection", desc: "Analyzes traffic speed anomalies to detect accidents, breakdowns, or road debris within seconds, alerting emergency services." }
+    ],
+    background: "Managing urban traffic flow is a complex coordination problem. Standard traffic light grids operate on pre-programmed schedules based on historical counts taken months or years prior. These static programs fail during accidents, road construction, holiday events, or weather shifts. The resulting gridlock causes massive economic losses, increases accident rates, and contributes significantly to urban air pollution. Solving this requires connecting traffic control hardware to centralized, intelligent software engines that can adjust signals dynamically based on real-time demand.",
+    problem: "Municipal traffic systems are often a mix of hardware from different generations and manufacturers. Connecting legacy signal controllers to a modern AI optimization engine is highly complex due to a lack of standard APIs. Additionally, optimizing a single intersection often pushes the bottleneck to the next intersection, requiring a global, network-wide optimization algorithm. Planners need a platform that scales across thousands of signals, processes massive data streams, and operates reliably in real-time.",
+    functionalities: [
+      { title: "Data Ingestion & Normalization Layer", desc: "Aggregates raw data from cameras, loops, and telemetry, converting it into a standardized vehicle count and speed format." },
+      { title: "Signal Controller API Bridge", desc: "Translates high-level timing requests from the AI into physical signal controller commands using NTCIP protocols." },
+      { title: "Reinforcement Learning Engine", desc: "Runs network-level models to calculate optimal phase lengths and cycle times across connected grids." },
+      { title: "Incident Management Module", desc: "Monitors traffic anomalies, flags potential collisions, and generates alternate route recommendations for signage." },
+      { title: "V2X Communication Interface", desc: "Broadcasts signal phase and timing (SPaT) data to connected vehicles, enabling dashboard speed recommendations." },
+      { title: "Reporting & Analytics Panel", desc: "Provides municipal planners with detailed charts on average travel times, carbon offsets, and corridor throughput." }
+    ],
+    valueDelivery: "Our Traffic Flow Optimization Software delivers value by reducing average city commute times by up to 25% and vehicle idle times at red lights by 35%. This significant reduction in idling directly translates to a 10-15% drop in municipal greenhouse gas emissions, assisting cities in meeting climate goals. For transit agencies, it improves bus schedule compliance by 20%, encouraging public transport usage. Municipalities save millions in infrastructure costs by maximizing the efficiency of existing roads, delaying or eliminating the need for expensive road widening projects.",
+    workflow: [
+      { step: 1, title: "Telemetry Collection", desc: "Connected vehicle location coordinates, loop sensor counts, and video analytics feeds are continuously collected." },
+      { step: 2, title: "Digital Twin Mapping", desc: "The platform maps vehicle density, queue lengths, and speeds onto a live digital twin of the city's road network." },
+      { step: 3, title: "AI Timing Calculation", desc: "The reinforcement learning engine evaluates the current state and calculates optimal green light extensions or phase cuts." },
+      { step: 4, title: "Signal Actuation", desc: "The API bridge transmits timing commands to physical intersection controllers, which update light states." },
+      { step: 5, title: "Flow Assessment & Loop", desc: "The system monitors the resulting traffic flow changes, feeding performance back into the AI to continuously improve models." }
+    ],
+    process: [
+      { step: 1, title: "Traffic Network Assessment", desc: "Map the target city corridors, identify critical bottlenecks, and audit existing traffic signal controller hardware." },
+      { step: 2, title: "Sensor and Hardware Integration", desc: "Install missing radar/camera sensors and connect existing signal controllers to the central cloud platform." },
+      { step: 3, title: "Configuring the API Bridge", desc: "Configure NTCIP or proprietary protocol bridges to enable secure, bidirectional communication with signal controllers." },
+      { step: 4, title: "Digital Twin & Network Modeling", desc: "Build the digital representation of the road network, defining speed limits, lane layouts, and intersection phases." },
+      { step: 5, title: "Model Training & Calibration", desc: "Train reinforcement learning models using historical traffic profiles, and run simulations to verify safety guardrails." },
+      { step: 6, title: "System Activation & Optimization", desc: "Activate the software in closed-loop mode, monitor signal timings, and review daily traffic flow improvements." }
+    ],
+    architecture: "The platform is built on a highly scalable, hybrid cloud architecture. A lightweight edge computer deployed at each intersection processes raw video analytics locally, sending only aggregated vehicle counts and queue lengths to the central cloud. The central cloud platform, hosted on AWS, runs the network-wide optimization algorithms, coordinating signal patterns across entire neighborhoods. This distributed approach minimizes cellular data costs and ensures that if cloud connection is lost, individual intersections fall back to local, coordinated schedules.",
+    techArch: {
+      frontend: "Web-based GIS interface built with React, Leaflet, and WebGL, showing live traffic congestion colors, active signal phases, and vehicle queues.",
+      backend: "High-performance services developed in Rust and Go, capable of handling millions of telemetry updates per second.",
+      gateway: "Secured NGINX load balancer managing incoming traffic sensor data streams and outgoing signal timing commands.",
+      processing: "Apache Kafka ingestion pipelines connected to Apache Spark for real-time aggregation and calculation of average corridor speeds.",
+      ai_ml: "Deep Q-Networks (DQN) and policy gradient reinforcement learning algorithms implemented in PyTorch, running on GPU-optimized cloud instances.",
+      edge: "NVIDIA Jetson-based edge units deployed in traffic cabinets, running deep-learning video analytics to count vehicles and estimate queue lengths.",
+      security: "Virtual Private Networks (VPN) connecting traffic cabinets to the cloud, mutual TLS authentication (mTLS) for all devices, and AES-256 encryption.",
+      cloud: "AWS infrastructure leveraging Amazon DynamoDB for fast state storage, Amazon Timestream for sensor logs, and Amazon EKS for service orchestration.",
+      integration: "Standardized NTCIP 1202 interfaces for signal controllers, GTFS-RT APIs for public transit sync, and OpenGIS standards for map data.",
+      monitoring: "Datadog for cloud infrastructure tracking, Promtail and Loki for system log aggregation, and automated SMS alerts for hardware offline events."
+    },
+    technologies: {
+      languages: "Rust, Go, Python, JavaScript",
+      frameworks: "React, PyTorch, Apache Spark, SUMO (Simulation of Urban MObility)",
+      databases: "Amazon DynamoDB, Timestream, PostgreSQL (with PostGIS extension)",
+      cloud_platforms: "AWS, Microsoft Azure",
+      ai_ml_tools: "TensorFlow, Ray RLlib, OpenCV",
+      iot: "NTCIP 1202 Signal Controllers, Induction Loops, Thermal Traffic Cameras",
+      protocols: "NTCIP 1202, MQTT, HTTPS, WebSockets",
+      devops: "Docker, Kubernetes, Helm, Terraform",
+      cybersecurity: "mTLS, IPSec VPN, TLS 1.3, OAuth 2.0"
+    },
+    realWorld: [
+      { title: "Metropolitan Corridor Optimization", desc: "Coordinated 45 intersections along a busy commuter corridor, reducing morning rush hour travel times by 22%." },
+      { title: "Smart City Grid Deployment", desc: "Managed traffic light networks in a downtown business district, decreasing average red-light idle times by 31%." },
+      { title: "Emergency Corridor Preemption", desc: "Implemented dynamic routing for fire trucks and ambulances across 12 fire stations, reducing emergency response times by 4 minutes." },
+      { title: "Airport Expressway Flow Control", desc: "Managed expressway traffic lights and variable speed limits during holiday peak times, preventing terminal gridlock." },
+      { title: "Bus Rapid Transit (BRT) Sync", desc: "Configured green light extensions for a new BRT lane, improving bus schedule reliability from 75% to 94%." },
+      { title: "Industrial Freight Zone Traffic Control", desc: "Optimized signal timings around a busy maritime port, coordinating heavy cargo truck movements and reducing truck queues." },
+      { title: "Automated Accident Management System", desc: "Detected an multi-car collision via camera speed drops, automatically adjusting surrounding traffic lights to divert incoming traffic." },
+      { title: "Construction Zone Flow Adjustment", desc: "Dynamically adjusted signal phases to compensate for lane closures on a major urban bridge, keeping throughput stable." }
+    ],
+    benefits: [
+      { title: "Shorted Commute Times", desc: "Reduces average city commute times by up to 25%, restoring lost productivity to the local economy." },
+      { title: "Lower Urban Carbon Footprint", desc: "Cuts vehicle idle times by 35%, leading to a direct 10-15% reduction in municipal emissions." },
+      { title: "Faster Emergency Response", desc: "Clears roads ahead of emergency vehicles automatically, improving response times and saving lives." },
+      { title: "Delayed Infrastructure Capital", desc: "Postpones the need for costly physical road expansions by maximizing the capacity of existing lanes." },
+      { title: "Improved Public Transit Appeal", desc: "Keeps buses and light rails running on time, driving higher public transport usage." }
+    ],
+    challenges: [
+      { title: "Legacy Hardware Hurdles", desc: "Interfacing with older electromechanical traffic controllers that lack processing power and modern API connectivity." },
+      { title: "Sensor Uptime and Maintenance", desc: "Dirt, ice, and lens fog frequently degrade camera and radar accuracy, requiring automated sensor fault detection." },
+      { title: "Congestion Relocation Risk", desc: "Solving bottlenecks in one zone can push congestion to adjacent neighborhoods if not globally optimized." },
+      { title: "High Municipal Cybersecurity Risks", desc: "Preventing hackers from taking control of traffic lights, which could paralyze entire cities." }
+    ],
+    future: "The future of traffic flow optimization lies in direct vehicle integration and autonomous swarm coordination. By integrating with V2X platforms, traffic lights will communicate target speed profiles directly to vehicles, allowing cars to adjust their speed so they always arrive at intersections during green lights, eliminating the need to stop entirely. Reinforcement learning models will run on decentralized edge networks, coordinating patterns locally between adjacent intersections. Eventually, autonomous vehicle swarms will coordinate their own movements through intersections without physical traffic lights, utilizing digital scheduling systems.",
+    impact: "This technology is vital for building sustainable, livable cities. By transforming traffic control from a reactive scheduling problem into a predictive, real-time optimization system, we improve air quality, lower commuter stress, and make public transit highly competitive. It reshapes municipal grid management and lays the infrastructure foundation for autonomous vehicle networks.",
+    conclusion: "Our Traffic Flow Optimization Software provides a powerful, scalable, and data-driven approach to urban congestion management. By leveraging real-time sensor streams and advanced reinforcement learning, we help cities move smarter, breathe cleaner, and prepare for the future of connected mobility."
+  }
+};
+
+fs.writeFileSync(
+  path.join(dataDir, 'products_1_5.json'),
+  JSON.stringify(products1to5, null, 2)
+);
+
+console.log('Product Data for 1-5 written successfully!');
