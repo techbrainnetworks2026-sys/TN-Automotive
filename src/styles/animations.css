@@ -3,4 +3,10 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-on-scroll { animation: fadeInSlideUp 0.8s ease forwards; opacity: 0; }
+.animate-on-scroll { 
+  animation: fadeInSlideUp 0.8s ease forwards; 
+  opacity: 0;
+  /* Hint the browser to optimize for transform/opacity changes */
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
